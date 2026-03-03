@@ -274,43 +274,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    /* =========================================
-       6. Shop Panel Logic
-       ========================================= */
-    const shopBtn = document.getElementById('ShopButton');
-    const shopPanel = document.getElementById('ShopPanel');
 
-    shopBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        shopPanel.classList.toggle('open');
-    });
-
-    document.addEventListener('mousedown', (e) => {
-        if (shopPanel.classList.contains('open') &&
-            !shopPanel.contains(e.target) &&
-            e.target !== shopBtn) {
-            shopPanel.classList.remove('open');
-        }
-    });
-
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabContainer = document.querySelector('.tab-container');
-    const panels = document.querySelectorAll('.panel-content');
-
-    tabBtns.forEach((btn, index) => {
-        btn.addEventListener('click', () => {
-            tabBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            tabContainer.setAttribute('data-active-index', index);
-
-            const targetId = btn.getAttribute('data-target');
-            panels.forEach(panel => {
-                if (panel.id === targetId) {
-                    panel.classList.add('active');
-                } else {
-                    panel.classList.remove('active');
-                }
-            });
-        });
-    });
 });
