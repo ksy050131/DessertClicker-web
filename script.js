@@ -153,16 +153,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Checkbox completion logic
+    todoListContainer.addEventListener('change', (e) => {
+        if (e.target.type === 'checkbox' && e.target.checked) {
+            if (typeof unityInstance !== 'undefined' && unityInstance !== null) {
+                unityInstance.SendMessage("Canvas", "AddCoinFromWeb", 50);
+                console.log("[Web->Unity] 투두리스트 완료! 50 코인 전송");
+            } else {
+                console.log("[Web Only] 투두리스트 완료 (코인 50 획득 대기) - 유니티 인스턴스 미연결");
+            }
+        }
+    });
+
     /* =========================================
        4. Fomodoro Timer Logic
        ========================================= */
     const fomoWidget = document.getElementById('Fomodoro');
     const timeDisplay = fomoWidget.querySelector('.time-display');
     const timeSelect = fomoWidget.querySelector('.time-select');
-    const startBtn = fomoWidget.querySelector('.StartButton');
     const stopBtn = fomoWidget.querySelector('.StopButton');
 
-    let totalSeconds = 25 * 60;
+    let initialMinutes = 25; // Store the chosen minutes
+    let totalSeconds = initialMinutes * 60;
     let timerInterval = null;
     let isRunning = false;
 
@@ -184,8 +196,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     timeSelect.addEventListener('change', (e) => {
-        const mins = parseInt(e.target.value, 10);
-        totalSeconds = mins * 60;
+        initialMinutes = parseInt(e.target.value, 10);
+        totalSeconds = initialMinutes * 60;
         updateDisplay(totalSeconds);
         // Hide select, restore display visibility
         timeSelect.style.display = 'none';
@@ -211,6 +223,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (totalSeconds <= 0) {
                 clearInterval(timerInterval);
                 isRunning = false;
+
+                // Unity Reward Logic
+                const rewardCoins = initialMinutes * 20;
+                if (typeof unityInstance !== 'undefined' && unityInstance !== null) {
+                    unityInstance.SendMessage("Canvas", "AddCoinFromWeb", rewardCoins);
+                    console.log(`[Web->Unity] ${initialMinutes}분 집중 완료! ${rewardCoins} 코인 전송`);
+                } else {
+                    console.log(`[Web Only] ${initialMinutes}분 집중 완료! (코인 ${rewardCoins} 획득 대기) - 유니티 인스턴스 미연결`);
+                }
             }
         }, 1000);
     });

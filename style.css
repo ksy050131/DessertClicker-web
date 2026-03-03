@@ -142,6 +142,27 @@ html {
     box-shadow: var(--pixel-border);
 }
 
+.nav-btn.btn-todo {
+    background-image: url('todo_icon.png');
+    background-size: 32px 32px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.nav-btn.btn-music {
+    background-image: url('music_icon.png');
+    background-size: 32px 32px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.nav-btn.btn-fomodoro {
+    background-image: url('fomodoro_icon.png');
+    background-size: 32px 32px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
 .nav-btn:hover {
     background: #fff;
     transform: translate(-2px, -2px);
