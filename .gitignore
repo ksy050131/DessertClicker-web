@@ -33,3 +33,6 @@ Thumbs.db
 # Log files
 logs/
 *.log
+
+# Unity generated WebGL build
+unity-build/

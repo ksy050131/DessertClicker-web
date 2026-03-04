@@ -1,6 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     /* =========================================
+       0. Prevent Unity WebGL from Stealing Input
+       ========================================= */
+    // Unity captures all keyboard events on the document by default
+    // We stop propagation on inputs so we can type and use Backspace normally
+    ['keydown', 'keyup', 'keypress'].forEach(eventName => {
+        document.addEventListener(eventName, (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                e.stopPropagation();
+            }
+        }, { capture: true });
+    });
+
+    /* =========================================
        1. Widget Drag & Drop and Z-Index Logic
        ========================================= */
     const widgets = document.querySelectorAll('.widget');
@@ -171,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fomoWidget = document.getElementById('Fomodoro');
     const timeDisplay = fomoWidget.querySelector('.time-display');
     const timeSelect = fomoWidget.querySelector('.time-select');
+    const startBtn = fomoWidget.querySelector('.StartButton');
     const stopBtn = fomoWidget.querySelector('.StopButton');
 
     let initialMinutes = 25; // Store the chosen minutes

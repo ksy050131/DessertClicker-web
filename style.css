@@ -50,10 +50,12 @@
 
 body,
 html {
-    width: 100vw;
-    height: 100vh;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
-    background-color: var(--sub-color);
+    background-color: transparent;
     letter-spacing: 1px;
     image-rendering: pixelated;
 }
@@ -62,16 +64,14 @@ html {
    Layer 0: Unity Container
    ========================================= */
 #unity-container {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     z-index: 0;
-    background: var(--sub-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    overflow: hidden;
+    background-color: black;
 }
 
 .unity-placeholder h1 {
@@ -86,11 +86,25 @@ html {
     margin-top: 10px;
 }
 
+/* Force Unity Canvas to be truly responsive (No clipping) */
+#unity-canvas {
+    width: 100vw !important;
+    height: 100vh !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+/* Clean up Unity template layout padding */
+body {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
 /* =========================================
    Layer 1: UI Wrapper
    ========================================= */
 #ui-wrapper {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -181,37 +195,35 @@ html {
     position: absolute;
     width: 250px;
     background: var(--panel-bg);
-
     border: none;
     border-radius: 0;
     margin: 2px;
     box-shadow: var(--pixel-box-shadow);
-
     display: flex;
     flex-direction: column;
     overflow: visible;
-    /* so shadows aren't clipped */
     pointer-events: auto;
     color: var(--text-dark);
 }
 
+/* Default initial positions for widgets (top left stacked) */
 #Todolist {
-    top: 50px;
-    left: 50px;
+    top: 20px;
+    left: 100px;
 }
 
 #Fomodoro {
-    top: 50px;
-    right: 50px;
+    top: 20px;
+    left: 370px;
     width: 220px;
 }
 
 #MusicPlayer {
-    top: 300px;
-    left: 50px;
+    top: 200px;
+    left: 100px;
 }
 
-/* Draggable Header */
+/* Draggable Header - Pixel Art Look */
 .widget-header {
     background: var(--main-color);
     padding: 12px 16px;
@@ -219,7 +231,6 @@ html {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* Use a bottom border to separate header inside the pixel box */
     border-bottom: 2px solid var(--pixel-border-color);
     user-select: none;
 }
