@@ -7,7 +7,7 @@ pnpm-debug.log
 
 # Build output
 dist/
-build/
+# build/ (Commented out to allow Unity WebGL Build folder)
 out/
 
 # Environment variables
