@@ -1,19 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     /* =========================================
-       0. Prevent Unity WebGL from Stealing Input
-       ========================================= */
-    // Unity captures all keyboard events on the document by default
-    // We stop propagation on inputs so we can type and use Backspace normally
-    ['keydown', 'keyup', 'keypress'].forEach(eventName => {
-        document.addEventListener(eventName, (e) => {
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-                e.stopPropagation();
-            }
-        }, { capture: true });
-    });
-
-    /* =========================================
        1. Widget Drag & Drop and Z-Index Logic
        ========================================= */
     const widgets = document.querySelectorAll('.widget');
@@ -113,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     newTodoInput.addEventListener('keydown', (e) => {
+        if (e.isComposing || e.keyCode === 229) return;
         if (e.key === 'Enter' && newTodoInput.value.trim() !== '') {
             todoCounter++;
             const newId = `todo${todoCounter}`;
@@ -161,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             input.addEventListener('blur', saveEdit);
             input.addEventListener('keydown', (ev) => {
+                if (ev.isComposing || ev.keyCode === 229) return;
                 if (ev.key === 'Enter') saveEdit();
             });
         }
