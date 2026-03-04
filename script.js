@@ -19,33 +19,53 @@ document.addEventListener('DOMContentLoaded', () => {
         let initialLeft, initialTop;
 
         widget.addEventListener('mousedown', () => bringToFront(widget));
+        widget.addEventListener('touchstart', () => bringToFront(widget), { passive: true });
 
-        // Note: Check if the target is an add button or close button to ignore drag
-        header.addEventListener('mousedown', (e) => {
+        // Helper to get clientX / clientY from either Mouse or Touch event
+        function getEventPoint(e) {
+            return e.touches ? e.touches[0] : e;
+        }
+
+        function dragStart(e) {
             if (e.target.closest('.close-btn') || e.target.closest('.add-todo-btn')) return;
 
+            const pt = getEventPoint(e);
             isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
+            startX = pt.clientX;
+            startY = pt.clientY;
 
             const style = window.getComputedStyle(widget);
-            initialLeft = parseInt(style.left, 10);
-            initialTop = parseInt(style.top, 10);
+            initialLeft = parseInt(style.left, 10) || 0;
+            initialTop = parseInt(style.top, 10) || 0;
             document.body.style.userSelect = 'none';
-        });
+        }
 
-        document.addEventListener('mousemove', (e) => {
+        function dragMove(e) {
             if (!isDragging) return;
-            widget.style.left = `${initialLeft + (e.clientX - startX)}px`;
-            widget.style.top = `${initialTop + (e.clientY - startY)}px`;
-        });
+            // Prevent scrolling while dragging a widget on mobile
+            if (e.type === 'touchmove') e.preventDefault();
 
-        document.addEventListener('mouseup', () => {
+            const pt = getEventPoint(e);
+            widget.style.left = `${initialLeft + (pt.clientX - startX)}px`;
+            widget.style.top = `${initialTop + (pt.clientY - startY)}px`;
+        }
+
+        function dragEnd() {
             if (isDragging) {
                 isDragging = false;
                 document.body.style.userSelect = '';
             }
-        });
+        }
+
+        // Mouse Events
+        header.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', dragMove);
+        document.addEventListener('mouseup', dragEnd);
+
+        // Touch Events
+        header.addEventListener('touchstart', dragStart, { passive: false });
+        document.addEventListener('touchmove', dragMove, { passive: false });
+        document.addEventListener('touchend', dragEnd);
 
         const closeBtn = widget.querySelector('.close-btn');
         if (closeBtn) {
@@ -297,6 +317,5 @@ document.addEventListener('DOMContentLoaded', () => {
             urlSubmit.click();
         }
     });
-
 
 });
